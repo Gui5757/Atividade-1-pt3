@@ -123,6 +123,33 @@ const server = Bun.serve({
       headers: { "Content-Type": "application/json" }
     });
   }
+
+  //  Adicione validação de campos: Implemente validação nos endpoints para 
+  //  garantir que os dados enviados possuem os campos obrigatórios e tipos 
+  //  corretos. Retorne um código de status 400 (Bad Request) quando a validação falhar.
+
+   function validateItemData(data: any): { isValid: boolean; error?: string } {
+    if (!data || typeof data !== 'object') {
+      return { isValid: false, error: "Invalid data format" };
+    }
+    if (!data.description || typeof data.description !== 'string') {
+      return { isValid: false, error: "Description is required and must be a string" };
+    }
+    return { isValid: true };
+  }
+
+  function validateIndex(indexStr: string | null): { isValid: boolean; index?: number; error?: string } {
+    if (!indexStr) {
+      return { isValid: false, error: "Index parameter is required" };
+    }
+    const index = parseInt(indexStr);
+    if (isNaN(index) || index < 0) {
+      return { isValid: false, error: "Invalid index parameter" };
+    }
+    return { isValid: true, index };
+  }
+
+
 });
 
 console.log(`Servidor rodando em http://localhost:${port}`);
